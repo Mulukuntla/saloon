@@ -13,7 +13,7 @@ const server=http.createServer((req,res)=>{
             res.write('<html>')
             res.write('<head><title>Enter Message</title></head>')
             res.write(`<body>${data}</body>`)
-            res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>')
+            res.write('<body><form action="/message" method="POST"><input type="text" name="messa"><button type="submit">Send</button></form></body>')
             res.write('</html>')
             return res.end()
 
