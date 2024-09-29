@@ -2,11 +2,11 @@
 const express= require('express');
 const bodyparser=require('body-parser')
 const app=express();
-const adminRouter=require('./routes/admin')
-const shopRouter=require('./routes/shop')
+const loginRouter=require('./routes/login')
+const userRouter=require('./routes/user')
 app.use(bodyparser.urlencoded({extended:false}))
-app.use('/shop',shopRouter)
-app.use('/admin',adminRouter)
+app.use(loginRouter)
+app.use(userRouter)
 
 app.use((req,res,next)=>{
     res.status(404).send('<h1>Page Not Found</h1>')
