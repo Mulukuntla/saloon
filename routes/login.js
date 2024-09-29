@@ -12,7 +12,7 @@ router.get("/login",(req,res,next)=>{
         </form>
     `);
     
-    res.redirect('/')
+   
        
 })
 
