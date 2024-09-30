@@ -1,31 +1,33 @@
-const path=require('path')
-const rootdir=require('../util/path')
-const express= require('express');
-const app=express();
-exports.getAddProduct=(req,res,next)=>{
-    res.sendFile(path.join(rootdir,'views','add-product.html'));
-    
-    
-       
-}
-exports.postAddProduct=(req,res,next)=>{
-    console.log(req.body)
-    res.redirect('/')
-}
+const Product=require('../models/product')
 
-exports.getProducts=(req,res,next)=>{
-   
-    res.sendFile(path.join(rootdir,'views','shop.html'))
-}
 
-exports.contactUsCon=(req,res,next)=>{
-    res.sendFile(path.join(rootdir,'views','contactUs.html'));
-    
-    
-       
-}
+exports.getAddProduct = (req, res, next) => {
+  res.render('add-product', {
+    pageTitle: 'Add Product',
+    path: '/admin/add-product',
+    formsCSS: true,
+    productCSS: true,
+    activeAddProduct: true
+  });
+};
 
-exports.successcon=(req,res,next)=>{
-    
-    res.send('<h1>Successfully Filled</h1>')
-}
+exports.postAddProduct = (req, res, next) => {
+  const product =new Product(req.body.title)
+  product.save()
+  res.redirect('/');
+};
+
+exports.getProducts = (req, res, next) => {
+  Product.fetchAll((products)=>{
+    res.render('shop', {
+      prods: products,
+      pageTitle: 'Shop',
+      path: '/',
+      hasProducts: products.length > 0,
+      activeShop: true,
+      productCSS: true
+    });
+
+  })
+  
+};
