@@ -21,4 +21,9 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(4000);
+
+const PORT = process.env.PORT || 4001; // Change to a different port
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
