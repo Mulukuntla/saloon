@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body style="margin: 0">
+    <h2 style="text-align:center;">Students Manager</h2>
+    <h2 style="text-align:center;">All Students <span id="count">0</span></h2>
+   
+
+  <form id="userForm" onsubmit="handleFormSubmit(event)">
+    
+    <label for="username">Name</label>
+    <input type="text" name="name" id="name" /><br>
+    <label for="phone">Email</label>
+    <input type="email" name="email" id="email" /><br>
+    <label for="address">Phone</label>
+    <input type="number" name="number" id="number" /><br>
+   
+    <button type="submit">Add</button>
+  </form>
+  <h1>All Students</h1>
+  <ul id="listOfUsers"></ul>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+<script src="index.js"></script>
+
+</html>
