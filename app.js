@@ -20,12 +20,15 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const userRoutes = require('./routes/User');
+const expenseRoutes = require('./routes/Expense');
+
 
 
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use("/user",userRoutes)
+app.use("/user",expenseRoutes)
 
 
 app.use(errorController.get404);
