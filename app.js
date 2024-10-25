@@ -21,6 +21,7 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const userRoutes = require('./routes/User');
 const expenseRoutes = require('./routes/Expense');
+const mUserRoutes = require('./routes/mUser');
 
 
 
@@ -29,6 +30,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use("/user",userRoutes)
 app.use("/user",expenseRoutes)
+app.use("/user",mUserRoutes)
 
 
 app.use(errorController.get404);
