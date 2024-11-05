@@ -10,7 +10,7 @@ const mUsers=sequelize.define("mUsers",{
     primaryKey:true
   },
   user: Sequelize.STRING,
-  mentor:{
+  email:{
     type:Sequelize.STRING,
     
   },

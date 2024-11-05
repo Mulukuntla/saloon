@@ -1,16 +1,16 @@
-const mUsers= require("../models/mUser");
-const mTimes= require("../models/mTimes");
+let mUsers= require("../models/mUser");
+let mTimes= require("../models/mTimes");
 
 const addmUsers= async (req,res,next) =>{
     
     try{
       
       const user=req.body.user;
-      const mentor=req.body.mentor;
+      const email=req.body.email;
       const link=req.body.link;
       const time=req.body.time;
       const vacancies=req.body.vacancies;
-      console.log(user,mentor,link,time,vacancies)
+      console.log(user,email,link,time,vacancies)
 
 
       mTimes.findByPk(time)
@@ -36,7 +36,7 @@ const addmUsers= async (req,res,next) =>{
       
       
       
-      const data=await mUsers.create({user:user,mentor:mentor,link:link,time:time});
+      const data=await mUsers.create({user:user,email:email,link:link,time:time});
       
       const users= await mUsers.findAll();
       
@@ -105,7 +105,7 @@ const deletemUsers= async (req,res) => {
     
     const users= await mUsers.findAll();
       
-    const times= await mTimes.findAll();
+    
       
       
 
