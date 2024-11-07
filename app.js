@@ -21,24 +21,18 @@ app.use(cors());
 
 
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const userRoutes = require('./routes/User');
+
 const expenseRoutes = require('./routes/Expense');
-const mUserRoutes = require('./routes/mUser');
-const schoolRoutes = require('./routes/school');
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
 
-app.use('/admin', adminRoutes);
-app.use(shopRoutes);
-app.use("/user",userRoutes)
+
 app.use("/user",expenseRoutes)
-app.use("/user",mUserRoutes)
-app.use("/user",schoolRoutes)
+
 
 
 app.get('/search', (req, res) => {
@@ -57,7 +51,7 @@ sequelize
 .sync()
 .then(result =>{
   console.log(result)
-  const PORT =  4001; // Change to a different port
+  const PORT = process.env.PORT || 4008; // Change to a different port
   app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
