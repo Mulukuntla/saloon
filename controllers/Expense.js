@@ -1,4 +1,5 @@
 const Expense= require("../models/Expense")
+const bcrypt = require('bcrypt');
 function isstringinvalid(string){
   console.log(string)
   if(string.length==0){
@@ -22,9 +23,16 @@ const signup= async (req,res,next) =>{
       console.log("Hi")
       return res.status(400).json({err:"Bad parameters - Something is missing"})
     }
-    await Expense.create({userName:name,email:email,password:password})
+    const saltrounds=10
+    console.log(saltrounds)
+    bcrypt.hash(password,saltrounds,async (err,hash)=>{
+      console.log(err)
+      await Expense.create({userName:name,email:email,password:hash})
     
-    res.status(201).json({message:"Successfully created a new user"})
+      res.status(201).json({message:"Successfully created a new user"})
+
+    })
+    
     
   }  
   catch(err){
@@ -38,27 +46,38 @@ const signin= async (req,res,next) =>{
   try{
     const email=req.body.email;
     const password=req.body.password;
-   
-    const user = await Expense.findOne({ where: { email: email } });
-    console.log("user----------->"+user)
-    if(user==null){
-      return res.status(404).json({message:"User not found"})
-
-    }  
-    if (user.email==email && user.password==password){
+    if( isstringinvalid(email) || isstringinvalid(password)){
       console.log("Hi")
-      return res.status(200).json({message:"Successfully created a new user"})
-    
+      return res.status(400).json({message:"email or password is missing",success:false})
     }
-    if (user.email==email && user.password != password){
-      res.status(401).json({message:"User not authorized"})
-    } 
-    
-   
-    
+    const user=await Expense.findAll({ where: { email} })
+      
+      if(user.length>0){
+        bcrypt.compare(password,user[0].password,(err,result)=>{
+          if(err){
+            throw new Error("Something went wrong")
+
+          }
+          if(result === true){
+            return res.status(200).json({success:true,message:"User loggedin Successfully"})
+  
+          }
+          else{
+            return res.status(401).json({success:false,message:"Password is incorrect"})
+  
+          }
+
+        })
+        
+      }
+      else{
+        return res.status(404).json({success:false,message:"User not found"})
+
+      }
+     
   }  
   catch(err){
-    res.status(500).json(err);
+    res.status(500).json({message:err,success:false});
   }
 }
 
