@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const userController=require("../controllers/Expense")
 
-router.post("/add-expense",userController.addExpense);
+router.post("/signup",userController.signup);
 router.get("/get-expense",userController.getExpense)
 
 router.delete("/delete-expense/:id",userController.deleteExpense)

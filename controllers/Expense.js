@@ -1,38 +1,37 @@
 const Expense= require("../models/Expense")
 
-const addExpense= async (req,res,next) =>{
+const signup= async (req,res,next) =>{
     
-    try{
-      const iid=req.body.ide;
-      const expense=req.body.expense;
-      const description=req.body.description;
-      const category=req.body.category;
-      
-      console.log(iid,expense,description,category)
-      var data;
-      if(!iid){
-        data=await Expense.create({expense:expense,description:description,category:category});
-
-      }
-      else{
-        data=await Expense.create({id:iid,expense:expense,description:description,category:category});
-
-      }
-      
-      
-      
-      
-      console.log(expense,description,category)
-      
-      res.status(201).json({newUserDetail:data});
-
-
-    }  
-    catch(err){
-      res.status(500).json({
-        error:err
+  try{
+    const name=req.body.name;
+    const email=req.body.email;
+    const phonenumber=req.body.number;
+    var emails;
+    await Expense.findByPk(email)
+      .then(product =>{
+        emails=product.email
+        console.log("usedEmail--->"+emails)
+        
       })
+      .catch(err => console.log(err))
+    if(emails===undefined){
+      const data=await Expense.create({name:name,email:email,phonenumber:phonenumber});
+      res.status(201).json({newUserDetail:data});
+     
+
     }
+    else{
+      res.status(201).json({newUserDetail:undefined})
+    }
+     
+
+
+  }  
+  catch(err){
+    res.status(500).json({
+      error:err
+    })
+  }
 }
 
 const getExpense=async (req,res,next)=>{
@@ -94,7 +93,7 @@ const deleteExpense= async (req,res) => {
     
     
 module.exports={
-    addExpense,
+    signup,
     getExpense,
     deleteExpense,
     preeditExpense
