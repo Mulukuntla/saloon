@@ -12,12 +12,10 @@ async function signin(event){
         if(response.status ===200){
             document.body.innerHTML+=`<div style="color:green;">${response.data.message}<div>`
 
+          window.location.href = "../ExpenseTrackerFrontendProject/addExpense.html";
+
         }
        
-        
-        
-        
-        
       })
       .catch(err =>{
         console.log(err)
