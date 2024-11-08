@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
   
 const errorController = require('./controllers/error');
+const expenseTrackerRoutes = require('./routes/ExpenseTracker');
+
 
 const sequelize=require('./util/database')
 
@@ -32,7 +34,7 @@ app.set('views', 'views');
 
 
 app.use("/user",expenseRoutes)
-
+app.use("/expense",expenseTrackerRoutes)
 
 
 app.get('/search', (req, res) => {
