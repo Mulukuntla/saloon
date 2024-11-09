@@ -17,6 +17,9 @@ const Expense=sequelize.define("ExpenseTracker",{
   category:{
     type:Sequelize.STRING,
    
+  },
+  userId:{
+    type:Sequelize.INTEGER
   }
 });
 

@@ -1,5 +1,6 @@
 const Expense= require("../models/Expense")
 const bcrypt = require('bcrypt');
+const jwt=require("jsonwebtoken")
 function isstringinvalid(string){
   console.log(string)
   if(string.length==0){
@@ -40,6 +41,10 @@ const signup= async (req,res,next) =>{
   }
 }
 
+function generateAccessToken(id,name){
+  return jwt.sign({userId:id,name:name},"hi")
+  
+}
 
 const signin= async (req,res,next) =>{
     
@@ -47,8 +52,8 @@ const signin= async (req,res,next) =>{
     const email=req.body.email;
     const password=req.body.password;
     if( isstringinvalid(email) || isstringinvalid(password)){
-      console.log("Hi")
-      return res.status(400).json({message:"email or password is missing",success:false})
+     
+      return res.status(400).json({message:"email or password is missing",success:false,})
     }
     const user=await Expense.findAll({ where: { email} })
       
@@ -59,7 +64,7 @@ const signin= async (req,res,next) =>{
 
           }
           if(result === true){
-            return res.status(200).json({success:true,message:"User loggedin Successfully"})
+            return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id,user[0].userName)})
   
           }
           else{

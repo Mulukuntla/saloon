@@ -1,34 +1,39 @@
 const Expense= require("../models/ExpenseTracker")
+function isstringvalid(string){
+    if(string.length===0 || string==undefined){
+        return true
+    }
+    else{
+        return false
+    }
+}
 
 const addExpense= async (req,res,next) =>{
-    
     try{
-      
       const expense=req.body.expense;
       const description=req.body.description;
       const category=req.body.category;
+      if(isstringvalid(expense) || isstringvalid(description) || isstringvalid(category)){
+        return res.status(400).json({success:false,message:"Parameters missing"})
+      }
       
       console.log(expense,description,category)
       
       
-      const data=await Expense.create({expense:expense,description:description,category:category});
+      const data=await Expense.create({expense:expense,description:description,category:category,userId:req.user.id})
+      
+      
+      res.status(201).json({newUserDetail:data,success:true});
+
+    } 
+     
 
      
-      
-      
-      
-      
-      console.log(expense,description,category)
-      
-      await res.status(201).json({newUserDetail:data});
-
-
-    }  
     catch(err){
-      res.status(500).json({
-        error:err
-      })
-    }
+        res.status(500).json({error:err,success:false});
+
+      }
+      
 }
 
 const getExpense=async (req,res,next)=>{
@@ -36,6 +41,7 @@ const getExpense=async (req,res,next)=>{
       const users= await Expense.findAll();
       console.log(users)  
       res.status(200).json({allUsers :users});
+      //{where:{userId:req.user.id}}
   
     }
     catch(error){
@@ -45,23 +51,28 @@ const getExpense=async (req,res,next)=>{
   }
 
 const deleteExpense= async (req,res) => {
-  console.log(req.params.id)
-    try{
-      if(!req.params.id){
-        console.log("ID is missing" == "undefined")
-        return res.status(400).json({err:"Id is missing"})
-      }
+  
       
-      const uId=req.params.id;
-      await Expense.destroy({where:{id:uId}});
-      res.status(200).json({ide:uId});
+      
+    const uId=req.params.id;
+    if(isstringvalid(uId)){
+        return res.status(400).json({success:false,message:"not an valid id"})
     }
-    catch(err){
-      console.log(err)
-      res.status(500).json(err)
-  
-    }
-  
+    Expense.destroy({where:{userId:uId,userId:req.user.id}})
+    .then((noofrows)=>{
+      if(noofrows===0){
+        return res.status(404).json({success:false,message:"Expense doesnot belong to user"})
+
+      }
+    res.status(200).json({ide:uId,success:true,message:"deleted Successfully"});
+
+    })
+    .catch(err =>{
+        res.status(500).json({error:err,success:false,message:"failed"})
+
+    })
+      
+   
   }
 
  
