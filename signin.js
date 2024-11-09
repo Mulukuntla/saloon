@@ -8,13 +8,14 @@ async function signin(event){
     }
     await axios.post("http://localhost:4008/user/signin",obj)
       .then(response =>{
-        console.log(response)
-        if(response.status ===200){
-            document.body.innerHTML+=`<div style="color:green;">${response.data.message}<div>`
+        
+        alert(response.data.message)
+        console.log(response.data)
+        document.body.innerHTML+=`<div style="color:green;">${response.data.message}<div>`
+        localStorage.setItem("token",response.data.token)
 
-          window.location.href = "../ExpenseTrackerFrontendProject/addExpense.html";
+        window.location.href = "../ExpenseTrackerFrontendProject/addExpense.html";
 
-        }
        
       })
       .catch(err =>{

@@ -1,4 +1,4 @@
-async function handleFormSubmit(event) {
+ function handleFormSubmit(event) {
     event.preventDefault();
    
     const expense=event.target.amount.value;
@@ -10,7 +10,8 @@ async function handleFormSubmit(event) {
       description,
       category
     };
-    await axios.post("http://localhost:4008/expense/add-expense",obj) 
+    const token=localStorage.getItem("token")
+    axios.post("http://localhost:4008/expense/add-expense",obj,{headers :{"Authorization" :token}}) 
       .then((response) => {
         console.log(response.data.newUserDetail)
         console.log("created")
@@ -44,8 +45,10 @@ async function handleFormSubmit(event) {
     `
       parentNode.innerHTML += userItemHtml
     }
-    async function fetchAndDisplayUsers() {
-      await axios.get("http://localhost:4008/expense/get-expense")
+    function fetchAndDisplayUsers() {
+      const token=localStorage.getItem("token")
+      console.log(token)
+      axios.get("http://localhost:4008/expense/get-expense",{headers :{"Authorization" :token}})
         .then((response) => {
           console.log(response.data.allUsers)
           response.data.allUsers.forEach(user => {
@@ -65,14 +68,15 @@ async function handleFormSubmit(event) {
       
       fetchAndDisplayUsers();
     });
-    async function deleteUser(userId) {
-      await axios.delete(`http://localhost:4008/expense/delete-expense/${userId}`)
-      .then(response => {
+    function deleteUser(userId) {
+      const token=localStorage.getItem("token")
+      axios.delete(`http://localhost:4008/expense/delete-expense/${userId}`,{headers :{"Authorization" :token}})
+        .then(response => {
         
-        removeUserFromScreen(response.data.ide);
+          removeUserFromScreen(response.data.ide);
         
-      })
-      .catch(error => console.error('Error deleting user:', error));
+        })
+        .catch(error => console.error('Error deleting user:', error));
     }
     
     // Function to remove a user from the screen
