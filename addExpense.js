@@ -89,6 +89,66 @@
        
       }
     }
+
+document.getElementById("rzp-button").onclick=async function (e){
+  try{
+    const token=localStorage.getItem("token")
+    const response=await axios.get("http://localhost:4008/purchase/premiummembership",{headers :{"Authorization" :token}})
+    console.log(response)
+    console.log(response.razorpay_payment_id)
+
+  
+  
+  var options={
+    "key":response.data.key_id,//Enter the key id generated from the dashboard
+    "order_id":response.data.order.id,//for on time payment
+    //This handler function handles the successful payment
+    "handler":async function (response){
+      try{
+        const transactionResponse=await axios.post("http://localhost:4008/purchase/updatetransactionstatus",{
+          order_id:options.order_id,
+          payment_id:response.razorpay_payment_id
+        },{headers :{"Authorization" :token}})
+        console.log(transactionResponse)
+        alert("you are now a premium user")
+
+      }
+      catch(err){
+        console.log(err)
+      }
+      
+        
+      
+    }
+    
+  }
+  const rzp1=new Razorpay(options)
+  rzp1.open()
+  e.preventDefault()
+  rzp1.on("payment.failed",async function (response){
+    alert("Something went wrong with the payment")
+
+    try{
+      const transactionResponse=await axios.post("http://localhost:4008/purchase/updatetransactionstatusfailed",{
+        order_id:options.order_id,
+        payment_id:response.razorpay_payment_id
+      },{headers :{"Authorization" :token}})
+      console.log(transactionResponse)
+      alert("Something went wrong with the payment")
+
+    }
+    catch(error){
+      console.log(error)
+    }
+    
+    
+  })
+}
+catch(err){
+  console.log(err)
+}
+
+}
     
   
     
