@@ -18,6 +18,9 @@ const Expense=sequelize.define("user",{
   password:{
     type:Sequelize.STRING,
    
+  },
+  ispremiumuser:{
+    type:Sequelize.BOOLEAN
   }
 });
 

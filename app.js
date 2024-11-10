@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
   
 const errorController = require('./controllers/error');
 const expenseTrackerRoutes = require('./routes/ExpenseTracker');
+const purchaseRoutes = require('./routes/purchase');
+const User= require("./models/Expense")
+const Expense= require("./models/ExpenseTracker")
+const Order=require("./models/orders")
 
 
 const sequelize=require('./util/database')
@@ -35,6 +39,13 @@ app.set('views', 'views');
 
 app.use("/user",expenseRoutes)
 app.use("/expense",expenseTrackerRoutes)
+app.use("/purchase",purchaseRoutes)
+
+User.hasMany(Expense)
+Expense.belongsTo(User)
+
+User.hasMany(Order)
+Order.belongsTo(User)
 
 
 app.get('/search', (req, res) => {
