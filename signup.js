@@ -15,7 +15,7 @@ async function signup(event){
       .then(response =>{
         console.log("created")
         console.log(response.data)
-        
+        window.location.href = "../ExpenseTrackerFrontendProject/signin.html";
         
       })
       .catch(err =>{

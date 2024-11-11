@@ -47,7 +47,13 @@
     }
     function fetchAndDisplayUsers() {
       const token=localStorage.getItem("token")
-      console.log(token)
+      const decodeToken=parseJwt(token)
+      console.log(decodeToken)
+      const ispremiumuser=decodeToken.ispremiumuser
+      if(ispremiumuser){
+        showpremiumusermessage()
+        showLeaderBoard()
+      }
       axios.get("http://localhost:4008/expense/get-expense",{headers :{"Authorization" :token}})
         .then((response) => {
           console.log(response.data.allUsers)
@@ -64,6 +70,22 @@
         })
         .catch((error) => console.error("Error fetching users:", error));
     }
+
+function showpremiumusermessage(){
+  document.getElementById("rzp-button").style.visibility="hidden"
+  document.getElementById("message").innerHTML="you are a premium user"
+
+}
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
     document.addEventListener('DOMContentLoaded', function() {
       
       fetchAndDisplayUsers();
@@ -91,64 +113,76 @@
     }
 
 document.getElementById("rzp-button").onclick=async function (e){
-  try{
+  
     const token=localStorage.getItem("token")
     const response=await axios.get("http://localhost:4008/purchase/premiummembership",{headers :{"Authorization" :token}})
     console.log(response)
     console.log(response.razorpay_payment_id)
-
-  
-  
-  var options={
+    var options=
+    {
     "key":response.data.key_id,//Enter the key id generated from the dashboard
     "order_id":response.data.order.id,//for on time payment
     //This handler function handles the successful payment
     "handler":async function (response){
-      try{
+        console.log(response)
         const transactionResponse=await axios.post("http://localhost:4008/purchase/updatetransactionstatus",{
           order_id:options.order_id,
           payment_id:response.razorpay_payment_id
         },{headers :{"Authorization" :token}})
         console.log(transactionResponse)
         alert("you are now a premium user")
-
-      }
-      catch(err){
-        console.log(err)
-      }
-      
         
-      
+        localStorage.setItem("token",transactionResponse.data.token)
+        const tokens=localStorage.getItem("token")
+        const decodeToken=parseJwt(tokens)
+        console.log(decodeToken)
+        const ispremiumuser=decodeToken.ispremiumuser
+        if(ispremiumuser){
+        showpremiumusermessage()
+        showLeaderBoard()
+      }
+      }
     }
     
-  }
-  const rzp1=new Razorpay(options)
-  rzp1.open()
-  e.preventDefault()
-  rzp1.on("payment.failed",async function (response){
-    alert("Something went wrong with the payment")
-
-    try{
-      const transactionResponse=await axios.post("http://localhost:4008/purchase/updatetransactionstatusfailed",{
+ 
+      const rzp1=new Razorpay(options)
+      console.log(rzp1)
+      console.log(options)
+      rzp1.open()
+      e.preventDefault()
+      rzp1.on("payment.failed",async function (response){
+        console.log(response)
+        console.log(response.error.metadata.payment_id)
+        const transactionResponses=await axios.post("http://localhost:4008/purchase/updatetransactionstatusfailed",{
         order_id:options.order_id,
-        payment_id:response.razorpay_payment_id
-      },{headers :{"Authorization" :token}})
-      console.log(transactionResponse)
+        payment_id:response.error.metadata.payment_id
+      },{headers :{"Authorization" :token}});
+      console.log(transactionResponses)
       alert("Something went wrong with the payment")
 
-    }
-    catch(error){
-      console.log(error)
-    }
-    
-    
-  })
-}
-catch(err){
-  console.log(err)
+      })
 }
 
+function showLeaderBoard(){
+  const inputElement=document.createElement("input")
+  inputElement.type="button"
+  inputElement.value="Show Leaderboard"
+  inputElement.onclick=async ()=>{
+    const token=localStorage.getItem("token")
+    const userLeaderBoardArray=await axios.get("http://localhost:4008/premium/showLeaderboard",{headers :{"Authorization" :token}})
+    console.log(userLeaderBoardArray.data.userLeaderBoardDetails)
+    const leaderboardElem=document.getElementById("leaderboard")
+    leaderboardElem.innerHTML="<h1>Leader Board</h1>"
+    userLeaderBoardArray.data.userLeaderBoardDetails.forEach((userDetails)=>{
+      leaderboardElem.innerHTML +=`<li>Name-${userDetails.name} Total Expense-${userDetails.total_cost} `
+    })
+
+  }
+  document.getElementById("message").appendChild(inputElement)
 }
+
+
+
     
   
     
