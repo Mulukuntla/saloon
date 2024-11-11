@@ -38,7 +38,7 @@ const addExpense= async (req,res,next) =>{
 
 const getExpense=async (req,res,next)=>{
     try{
-      const users= await Expense.findAll();
+      const users= await Expense.findAll({where:{userId:req.user.id}});
       console.log(users)  
       res.status(200).json({allUsers :users});
       //{where:{userId:req.user.id}}

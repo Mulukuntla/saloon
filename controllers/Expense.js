@@ -41,8 +41,8 @@ const signup= async (req,res,next) =>{
   }
 }
 
-function generateAccessToken(id,name){
-  return jwt.sign({userId:id,name:name},"hi")
+function generateAccessToken(id,name,ispremiumuser){
+  return jwt.sign({userId:id,name:name,ispremiumuser:ispremiumuser},"hi")
   
 }
 
@@ -64,7 +64,7 @@ const signin= async (req,res,next) =>{
 
           }
           if(result === true){
-            return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id,user[0].userName)})
+            return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id,user[0].userName,user[0].ispremiumuser)})
   
           }
           else{

@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const errorController = require('./controllers/error');
 const expenseTrackerRoutes = require('./routes/ExpenseTracker');
 const purchaseRoutes = require('./routes/purchase');
+const premiumFeatureRoutes = require('./routes/premiumFeature');
 const User= require("./models/Expense")
 const Expense= require("./models/ExpenseTracker")
 const Order=require("./models/orders")
@@ -40,6 +41,8 @@ app.set('views', 'views');
 app.use("/user",expenseRoutes)
 app.use("/expense",expenseTrackerRoutes)
 app.use("/purchase",purchaseRoutes)
+app.use("/premium",premiumFeatureRoutes)
+
 
 User.hasMany(Expense)
 Expense.belongsTo(User)

@@ -1,6 +1,13 @@
 const Razorpay=require("razorpay")
 const Order=require("../models/orders")
 const Expense= require("../models/Expense")
+const jwt=require("jsonwebtoken")
+
+function generateAccessToken(id,name,ispremiumuser){
+    return jwt.sign({userId:id,name:name,ispremiumuser:ispremiumuser},"hi")
+    
+  }
+  
 
 const purchasepremium=async (req,res,next)=>{
     try{
@@ -47,7 +54,7 @@ const updatetransactionstatus=async (req,res,next)=>{
 
         Promise.all([promise1,promise2]).then(()=>{
 
-            res.status(202).json({success:true,message:"Transaction Successful"})
+            res.status(202).json({success:true,message:"Transaction Successful",token:generateAccessToken(req.user.id,undefined,true)})
         })
         .catch(err =>{
             throw new Error(err)
@@ -74,12 +81,8 @@ const updatetransactionstatusfailed=async (req,res,next)=>{
         const payment_id=req.body.payment_id
         console.log("order_id-------->"+order_id+"payment_id-------->"+payment_id)
         const order=await Order.findOne({where:{orderid:order_id}})
-        order.update({status: "Failed",userId:req.user.id })
-        
-        
-            
-            
-        
+        await order.update({paymentid: payment_id,status: "Failed",userId:req.user.id })   
+        await res.status(202).json({success:true,message:"Transaction Failed"}) 
     }
     catch(err){
         
@@ -90,6 +93,8 @@ const updatetransactionstatusfailed=async (req,res,next)=>{
     }
    
 }
+
+
 
 
 
