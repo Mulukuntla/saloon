@@ -1,4 +1,5 @@
 const Expense= require("../models/ExpenseTracker")
+const totalExpensess= require("../models/Expense")
 function isstringvalid(string){
     if(string.length===0 || string==undefined){
         return true
@@ -21,18 +22,29 @@ const addExpense= async (req,res,next) =>{
       
       
       const data=await Expense.create({expense:expense,description:description,category:category,userId:req.user.id})
-      
-      
-      res.status(201).json({newUserDetail:data,success:true});
-
-    } 
-     
-
-     
-    catch(err){
-        res.status(500).json({error:err,success:false});
-
+      await res.status(201).json({newUserDetail:data,success:true});
+      const totalExpen=Number(req.user.totalExpenses)+Number(expense)
+      console.log(totalExpen)
+      await totalExpensess.update(
+          {totalExpenses:totalExpen},
+          {where:{id:req.user.id}}
+        )
       }
+      catch(err){
+        console.log(err)
+        res.status(500).json(err)
+      }
+       
+
+
+      
+      
+
+    
+     
+
+     
+    
       
 }
 
