@@ -7,9 +7,11 @@ const errorController = require('./controllers/error');
 const expenseTrackerRoutes = require('./routes/ExpenseTracker');
 const purchaseRoutes = require('./routes/purchase');
 const premiumFeatureRoutes = require('./routes/premiumFeature');
+const resetPasswordRoutes = require('./routes/forgotPassword')
 const User= require("./models/Expense")
 const Expense= require("./models/ExpenseTracker")
 const Order=require("./models/orders")
+const Forgotpassword = require("./models/forgotPassword")
 
 
 const sequelize=require('./util/database')
@@ -17,6 +19,11 @@ const sequelize=require('./util/database')
 
 var cors=require("cors")
 const app = express();
+const dotenv = require('dotenv');
+
+// get config vars
+dotenv.config();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,6 +49,8 @@ app.use("/user",expenseRoutes)
 app.use("/expense",expenseTrackerRoutes)
 app.use("/purchase",purchaseRoutes)
 app.use("/premium",premiumFeatureRoutes)
+app.use('/password', resetPasswordRoutes);
+
 
 
 User.hasMany(Expense)
@@ -49,6 +58,9 @@ Expense.belongsTo(User)
 
 User.hasMany(Order)
 Order.belongsTo(User)
+
+User.hasMany(Forgotpassword);
+Forgotpassword.belongsTo(User);
 
 
 app.get('/search', (req, res) => {

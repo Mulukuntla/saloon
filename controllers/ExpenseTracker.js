@@ -24,7 +24,7 @@ const addExpense= async (req,res,next) =>{
       
       
       const data=await Expense.create({expense:expense,description:description,category:category,userId:req.user.id},{transaction:t})
-      await res.status(201).json({newUserDetail:data,success:true});
+      
       const totalExpen=Number(req.user.totalExpenses)+Number(expense)
       console.log(totalExpen)
       await totalExpensess.update({
@@ -35,7 +35,7 @@ const addExpense= async (req,res,next) =>{
             transaction:t
           }
         )
-
+      await res.status(201).json({newUserDetail:data,success:true});
       await t.commit()
       }
       catch(err){
