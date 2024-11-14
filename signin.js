@@ -27,27 +27,11 @@ async function signin(event){
 
 
 }
+
 document.getElementById("forgotPassword").onclick=async function (e){
-  const parentNode = document.getElementById("forgotPasswordDiv");
-    const userItemHtml = `
-    <h1>Forgot Password</h1>
-    <form onsubmit="ForgotPassword(event)">
-    Enter email :<input type="email" name="forgotEmail"></input>
-    <button type="submit">Submit</button>
-    </form>
-  `
-    parentNode.innerHTML += userItemHtml
+  console.log("Hi")
+  window.location.href = "../ExpenseTrackerFrontendProject/forgotPassword.html";
 
 }
-async function ForgotPassword(event){
-  event.preventDefault()
-  const email=event.target.forgotEmail.value
-  await axios.post("http://localhost:4008/called/password/forgotpassword",obj)
-  .then(response =>{
-
-  })
-  .catch(err =>{
-
-  })
-
-}
+  
+  
