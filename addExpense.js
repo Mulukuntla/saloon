@@ -183,15 +183,17 @@ document.getElementById("message").appendChild(inputElement)
 }
 
 function download(){
+  const token=localStorage.getItem("token")
   axios.get('http://localhost:4008/user/download', { headers: {"Authorization" : token} })
   .then((response) => {
-      if(response.status === 201){
-          //the bcakend is essentially sending a download link
-          //  which if we open in browser, the file would download
-          var a = document.createElement("a");
-          a.href = response.data.fileUrl;
-          a.download = 'myexpense.csv';
-          a.click();
+      if(response.status === 200){
+        console.log(response)
+        const a=document.getElementById("showUrl")
+        a.href=response.data.fileUrl
+        a.textContent="click to download"
+
+          
+         
       } else {
           throw new Error(response.data.message)
       }
@@ -200,6 +202,58 @@ function download(){
   .catch((err) => {
       showError(err)
   });
+}
+
+function showError(err){
+  document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
+}
+
+
+function totaldownload(){
+  const token=localStorage.getItem("token")
+  axios.get('http://localhost:4008/user/totaldownloads', { headers: {"Authorization" : token} })
+  .then((response) => {
+      if(response.status === 200){
+        const a=document.getElementById("totaldownloads")
+        a.innerHTML="<h4> List of downloaded files</h4>"
+        
+        response.data.totallinks.forEach(user => {
+          
+        links(user)
+
+          
+
+       })
+      }
+    
+        
+       
+
+          
+         
+      else {
+          throw new Error(response.data.message)
+      }
+
+  })
+  .catch((err) => {
+      showError(err)
+  });
+}
+
+function showError(err){
+  document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
+}
+function links(user){
+  console.log(user)
+  const parentNode = document.getElementById("totaldownloads");
+  const userItemHtml = `
+  <li >
+  <a href="${user.links}">${user.date}</a>
+  </li>
+  `
+parentNode.innerHTML += userItemHtml
+
 }
 
   
