@@ -302,7 +302,8 @@ function showPagination({
 
 function getProducts(page){
   const token=localStorage.getItem("token")
-  axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{ headers: {"Authorization" : token} })
+  const pages=localStorage.getItem("pages")
+  axios.get(`http://localhost:4008/expense/get-expense?page=${page}&pages=${pages}`,{ headers: {"Authorization" : token} })
     .then(res =>{
       fetchAndDisplayUsers(res.data.products)
       showPagination(res.data)
