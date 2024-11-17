@@ -36,7 +36,7 @@ function handleFormSubmit(event) {
       return;
     }
     
-    const parentNode = document.getElementById("listOfItems");
+    const parentNode = document.getElementById("a");
     const userItemHtml = `
     <li id="${userDetails.id}">
       ${userDetails.expense} - ${userDetails.description} - ${userDetails.category}
@@ -45,7 +45,7 @@ function handleFormSubmit(event) {
   `
     parentNode.innerHTML += userItemHtml
   }
-  function fetchAndDisplayUsers() {
+  function fetchAndDisplayUsers(allUsers) {
     const token=localStorage.getItem("token")
     const decodeToken=parseJwt(token)
     console.log(decodeToken)
@@ -54,21 +54,25 @@ function handleFormSubmit(event) {
       showpremiumusermessage()
       showLeaderBoard()
     }
-    axios.get("http://localhost:4008/expense/get-expense",{headers :{"Authorization" :token}})
-      .then((response) => {
-        console.log(response.data.allUsers)
-        response.data.allUsers.forEach(user => {
+    
+    console.log("Hi")
+    console.log(allUsers)
+    const a = document.getElementById("listOfItems");
+    a.innerHTML=`<ul id="a"></ul>`
+
+    
+    allUsers.forEach(user => {
+      console.log("HIII")
           
-            displayUserOnScreen(user)
+        displayUserOnScreen(user)
 
             
 
-        })
+    })
            
        
        
-      })
-      .catch((error) => console.error("Error fetching users:", error));
+     
   }
 
 function showpremiumusermessage(){
@@ -88,7 +92,17 @@ return JSON.parse(jsonPayload);
 }
   document.addEventListener('DOMContentLoaded', function() {
     
-    fetchAndDisplayUsers();
+    const page=1
+    const token=localStorage.getItem("token")
+    axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
+    .then(res =>{
+      console.log(res.data.products)
+      fetchAndDisplayUsers(res.data.products)
+      showPagination(res.data)
+    })
+    .catch(err =>{
+      console.log(err)
+    })
   });
   function deleteUser(userId) {
     const token=localStorage.getItem("token")
@@ -103,13 +117,9 @@ return JSON.parse(jsonPayload);
   
   // Function to remove a user from the screen
   function removeUserFromScreen(userId) {
-    const parentNode = document.getElementById("listOfItems");
-    const childNodeToBeDeleted = document.getElementById(userId);
-    if (childNodeToBeDeleted) {
-      parentNode.removeChild(childNodeToBeDeleted);
-     
-     
-    }
+    document.getElementById(`${userId}`).remove()
+    
+    
   }
 
 document.getElementById("rzp-button").onclick=async function (e){
@@ -191,6 +201,7 @@ function download(){
         const a=document.getElementById("showUrl")
         a.href=response.data.fileUrl
         a.textContent="click to download"
+       
 
           
          
@@ -256,7 +267,51 @@ parentNode.innerHTML += userItemHtml
 
 }
 
-  
+
+function showPagination({
+  currentPage,
+  hasNextPage,
+  nextPage,
+  hasPreviousPage,
+  previousPage,
+  lastPage
+})
+{
+  const pagination =document.getElementById("pagination")
+  pagination.innerHTML=" ";
+  if(hasPreviousPage){
+    const btn2=document.createElement("button")
+    btn2.innerHTML=previousPage
+    btn2.addEventListener("click",()=>getProducts(previousPage))
+    pagination.appendChild(btn2)
+  }
+  const btn1=document.createElement("button")
+  btn1.innerHTML=`<h3>${currentPage}</h3>`
+  btn1.addEventListener("click",()=>getProducts(currentPage))
+  pagination.appendChild(btn1)
+  if(hasNextPage){
+    const btn3=document.createElement("button")
+    btn3.innerHTML=nextPage
+    btn3.addEventListener("click",()=>getProducts(nextPage))
+    pagination.appendChild(btn3)
+
+  }
+
+}
+
+function getProducts(page){
+  const token=localStorage.getItem("token")
+  axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{ headers: {"Authorization" : token} })
+    .then(res =>{
+      fetchAndDisplayUsers(res.data.products)
+      showPagination(res.data)
+    })
+    .catch(err =>{
+      console.log(err)
+    })
+
+}
+
 
   
   
