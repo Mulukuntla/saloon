@@ -26,12 +26,16 @@ const uploadToS3=(data,filename)=>{
         else{
           console.log("success",s3response)
           resolve(s3response.Location)
+          
+
         }
       })
   
     })
     
   }
+
+
 
 module.exports={
     uploadToS3

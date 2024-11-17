@@ -57,18 +57,33 @@ const addExpense= async (req,res,next) =>{
       
 }
 
+const ITEMS_PER_PAGE=2
 const getExpense=async (req,res,next)=>{
-    try{
-      const users= await Expense.findAll({where:{userId:req.user.id}});
-      console.log(users)  
-      res.status(200).json({allUsers :users});
-      //{where:{userId:req.user.id}}
-  
-    }
-    catch(error){
-      console.log("Get user is failing",JSON.stringify(error))
-      res.status(500).json({error:error})
-    }
+  console.log("Hi")
+  const page= +req.query.page || 1
+  await Expense.count({where:{userId:req.user.id}})
+    .then(async (total)=>{
+      totalItems=total
+      return await Expense.findAll({
+        userId:req.user.id,
+        offset:(page-1)*ITEMS_PER_PAGE,
+        limit:ITEMS_PER_PAGE
+      })
+
+    })
+    
+    .then((products) =>{
+      res.json({
+        products:products,
+        currentPage:page,
+        hasNextPage:ITEMS_PER_PAGE*page< totalItems,
+        nextPage:page+1,
+        hasPreviousPage:page >1,
+        previousPage:page-1,
+        lastPage:Math.ceil(totalItems/ITEMS_PER_PAGE)
+
+      })
+    })
   }
 
 const deleteExpense= async (req,res) => {
@@ -85,7 +100,7 @@ const deleteExpense= async (req,res) => {
     if(isstringvalid(uId)){
         return res.status(400).json({success:false,message:"not an valid id"})
     }
-    Expense.destroy({where:{userId:uId,userId:req.user.id}},{transaction:t})
+    Expense.destroy({where:{id:uId,userId:req.user.id}},{transaction:t})
     .then((noofrows)=>{
       
       if(noofrows===0){
@@ -103,11 +118,21 @@ const deleteExpense= async (req,res) => {
       await t.rollback()
         console.log(err)
         res.status(500).json({error:err,success:false,message:"failed"})
+  }
+}
+const getExpenses=async (req,res,next)=>{
+  try{
+    const users= await Expense.findAll({where:{userId:req.user.id}});
+    console.log(users)  
+    res.status(200).json({allUsers :users});
+    //{where:{userId:req.user.id}}
 
   }
-      
-   
+  catch(error){
+    console.log("Get user is failing",JSON.stringify(error))
+    res.status(500).json({error:error})
   }
+}
 
  
     
