@@ -94,7 +94,8 @@ return JSON.parse(jsonPayload);
     
     const page=1
     const token=localStorage.getItem("token")
-    axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
+    const pages=localStorage.getItem("pages")
+    axios.get(`http://localhost:4008/expense/get-expense?page=${page}&pages=${pages}`,{headers :{"Authorization" :token}})
     .then(res =>{
       console.log(res.data.products)
       fetchAndDisplayUsers(res.data.products)
@@ -310,6 +311,13 @@ function getProducts(page){
       console.log(err)
     })
 
+}
+
+function userPages(event){
+  event.preventDefault()
+  const pages=event.target.pagess.value
+  localStorage.setItem("pages",pages)
+  console.log("Hi")
 }
 
 

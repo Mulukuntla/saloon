@@ -43,7 +43,11 @@
     <div style="display: flex; justify-content: center; align-items: center;" id="pagination"></div>
     <button onclick="download()" id="downloadexpense">Download File</button> 
     <a id="showUrl" ></a>
-    <button onclick="totaldownload()">List of downloaded files</button> 
+    <button onclick="totaldownload()">List of downloaded files</button> <br><br>
+    <form onsubmit="userPages(event)">
+      expenses per page :<input type="number" name="pagess"></input>
+      <button type="submit">Submit</button>
+    </form>
     <ul id="totaldownloads"></ul>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
