@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Staff</title>
+    <link rel="stylesheet" href="staffManagement.css">
+</head>
+<body>
+    <h1>Add Staff Member</h1>
+    <form id="staffForm" onsubmit="addStaffMember(event)">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" ><br><br>
+
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization"><br><br>
+
+        <label for="skills">Skills:</label>
+        <input type="text" id="skills" name="skills" ><br><br>
+
+        <label for="availability">Availability:</label>
+        <input type="text" id="availability" name="availability"><br><br>
+
+        <button type="submit">addStaff</button>
+    </form>
+
+    <div id="message"></div>
+
+    
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+<script src="staffManagement.js"></script>
+</html>

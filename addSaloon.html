@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Registration</title>
+</head>
+<body>
+    <h1>Salon Registration</h1>
+    <form onsubmit="addSaloon(event)">
+        <label>Name of the Salon: <input type="text" name="name" ></label><br>
+        <label>Gmail: <input type="gmail" name="gmail" ></label><br>
+        <label>Password: <input type="text" name="password" ></label><br>
+        <label>Phone: <input type="text" name="phone" ></label><br>
+        <label>Street: <input type="text" name="street" ></label><br>
+        <label>Apartment: <input type="text" name="apartment"></label><br>
+        <label>ZIP: <input type="text" name="zip" ></label><br>
+        <label>City: <input type="text" name="city" ></label><br>
+        <label>Country: <input type="text" name="country"></label><br>
+        <button type="submit">Add Salon</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script src="addSaloon.js"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@ function handleFormSubmit(event) {
       category
     };
     const token=localStorage.getItem("token")
-    axios.post("http://localhost:4008/expense/add-expense",obj,{headers :{"Authorization" :token}}) 
+    axios.post("`http://13.60.220.147:4000/expense/add-expense",obj,{headers :{"Authorization" :token}}) 
       .then((response) => {
         console.log(response.data.newUserDetail)
         console.log("created")
@@ -95,7 +95,7 @@ function handleFormSubmit(event) {
     document.addEventListener('DOMContentLoaded', function() {
       const token=localStorage.getItem("token")
       const page=1
-      axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
+      axios.get(`http://13.60.220.147:4000/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
       .then(res =>{
         fetchAndDisplayUsers(res.data.products)
         showPagination(res.data)
@@ -109,7 +109,7 @@ function handleFormSubmit(event) {
     });
     function deleteUser(userId) {
       const token=localStorage.getItem("token")
-      axios.delete(`http://localhost:4008/expense/delete-expense/${userId}`,{headers :{"Authorization" :token}})
+      axios.delete(`http://13.60.220.147:4000/expense/delete-expense/${userId}`,{headers :{"Authorization" :token}})
         .then(response => {
         
           removeUserFromScreen(response.data.ide);
@@ -132,7 +132,7 @@ function handleFormSubmit(event) {
   document.getElementById("rzp-button").onclick=async function (e){
     try{
       const token=localStorage.getItem("token")
-      const response=await axios.get("http://localhost:4008/purchase/premiummembership",{headers :{"Authorization" :token}})
+      const response=await axios.get("`http://13.60.220.147:4000/purchase/premiummembership",{headers :{"Authorization" :token}})
       
       var options=
       {
@@ -141,7 +141,7 @@ function handleFormSubmit(event) {
       //This handler function handles the successful payment
       "handler":async function (response){
           
-          const transactionResponse=await axios.post("http://localhost:4008/purchase/updatetransactionstatus",{
+          const transactionResponse=await axios.post("`http://13.60.220.147:4000/purchase/updatetransactionstatus",{
             order_id:options.order_id,
             payment_id:response.razorpay_payment_id
           },{headers :{"Authorization" :token}})
@@ -167,7 +167,7 @@ function handleFormSubmit(event) {
         e.preventDefault()
         rzp1.on("payment.failed",async function (response){
           
-          const transactionResponses=await axios.post("http://localhost:4008/purchase/updatetransactionstatusfailed",{
+          const transactionResponses=await axios.post("`http://13.60.220.147:4000/purchase/updatetransactionstatusfailed",{
           order_id:options.order_id,
           payment_id:response.error.metadata.payment_id
         },{headers :{"Authorization" :token}});
@@ -187,7 +187,7 @@ function handleFormSubmit(event) {
   inputElement.value="Show Leaderboard"
   inputElement.onclick=async ()=>{
     const token=localStorage.getItem("token")
-    const userLeaderBoardArray=await axios.get("http://localhost:4008/premium/showLeaderboard",{headers :{"Authorization" :token}})
+    const userLeaderBoardArray=await axios.get("`http://13.60.220.147:4000/premium/showLeaderboard",{headers :{"Authorization" :token}})
     console.log(userLeaderBoardArray.data.userLeaderBoardDetails)
     const leaderboardElem=document.getElementById("leaderboard")
     leaderboardElem.innerHTML="<h1>Leader Board</h1>"
@@ -201,7 +201,7 @@ function handleFormSubmit(event) {
   
   function download(){
     const token=localStorage.getItem("token")
-    axios.get('http://localhost:4008/user/download', { headers: {"Authorization" : token} })
+    axios.get('`http://13.60.220.147:4000/user/download', { headers: {"Authorization" : token} })
     .then((response) => {
         if(response.status === 200){
           console.log(response)
@@ -229,7 +229,7 @@ function handleFormSubmit(event) {
   
   function totaldownload(){
     const token=localStorage.getItem("token")
-    axios.get('http://localhost:4008/user/totaldownloads', { headers: {"Authorization" : token} })
+    axios.get('`http://13.60.220.147:4000/user/totaldownloads', { headers: {"Authorization" : token} })
     .then((response) => {
         if(response.status === 200){
           const a=document.getElementById("totaldownloads")
@@ -310,7 +310,7 @@ function handleFormSubmit(event) {
     const token=localStorage.getItem("token")
     
     
-    axios.get(`http://localhost:4008/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
+    axios.get(`http://13.60.220.147:4000/expense/get-expense?page=${page}`,{headers :{"Authorization" :token}})
       .then(res =>{
         console.log(res)
         removeExpensesFromScreen(a)

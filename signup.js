@@ -1,6 +1,5 @@
 async function signup(event){
-  
- 
+  try{
     event.preventDefault()
     const name=event.target.name.value
     const email=event.target.email.value
@@ -11,19 +10,13 @@ async function signup(event){
       password:password
     }
     console.log(obj)
-    await axios.post("http://localhost:4008/user/signup",obj)
-      .then(response =>{
-        console.log("created")
-        console.log(response.data)
-        window.location.href = "../ExpenseTrackerFrontendProject/signin.html";
-        
-      })
-      .catch(err =>{
-        document.body.innerHTML+=`<div style="color:red;">${err}<div>`
-
-      })
-
-
-    
-    
+    const response=await axios.post("http://localhost:4008/user/signup",obj)
+    console.log("created")
+    console.log(response.data)
+    window.location.href = "./signin.html";
+  }
+  catch(err){
+    console.log(err)
+    document.body.innerHTML+=`<div style="color:red;">${err}<div>`
+  }
 }

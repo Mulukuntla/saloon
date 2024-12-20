@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Service to Staff</title>
+    <link rel="stylesheet" href="addServiceToStaff.css">
+</head>
+<body>
+    <h1>Add Service to Staff</h1>
+    <form id="addServiceForm" onsubmit="addServiceToStaff(event)">
+        <label for="staff">Select Staff:</label>
+        <select id="staff" name="staff">
+            <!-- Staff options will be populated dynamically -->
+        </select>
+        <br><br>
+
+        <label for="service">Select Service:</label>
+        <select id="service" name="service">
+            <!-- Service options will be populated dynamically -->
+        </select>
+        <br><br>
+
+        <button type="submit">Add Service</button>
+    </form>
+
+    <div id="message"></div>
+
+   
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+<script src="addServiceToStaff.js"></script>
+</html>

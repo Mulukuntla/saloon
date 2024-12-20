@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Profile</title>
+  </head>
+  <body>
+    <h2>Update Profile</h2>
+    <form id="updateProfileForm" onsubmit="updatePreferences(event)">
+      <label>Username: <input type="text" name="userName"></label><br>
+      <label>Phone: <input type="text" name="phone"></label><br>
+      <label>Street: <input type="text" name="street"></label><br>
+      <label>Apartment: <input type="text" name="apartment"></label><br>
+      <label>ZIP: <input type="text" name="zip"></label><br>
+      <label>City: <input type="text" name="city"></label><br>
+      <label>Country: <input type="text" name="country"></label><br>
+      <label>Preferences (JSON): <textarea name="preferences"></textarea></label><br>
+      <button type="submit">Update Profile</button>
+    </form>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+  <script src="updateProfile.js"></script>
+</html>
