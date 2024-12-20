@@ -1,15 +1,15 @@
 const jwt=require("jsonwebtoken")
-const User=require("../models/user")
+const User=require("../models/saloonUser")
 
 const authenticate=(req,res,next)=>{
     try{
         const token=req.header("authorization")
         console.log(token)
         const user =jwt.verify(token,"hi")
-        console.log("user------>"+user.userId)
-        User.findByPk(user.userId).then(user =>{
+        console.log("user------>"+user.saloonId)
+        User.findByPk(user.saloonId).then(user =>{
             
-            req.user=user
+            req.saloon=user
             next()
 
         }).catch(err =>{
